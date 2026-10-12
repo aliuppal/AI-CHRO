@@ -157,6 +157,7 @@ model Organization {
   onboardingPlans OnboardingPlan[]
   aiFeedback      AiFeedback[]
   auditLogs       AuditLog[]
+  dailyBriefings  DailyBriefing[]
 }
 
 /// A person who can sign in. Linked 1:1 to an Employee record when they work at the org.
@@ -515,6 +516,22 @@ model ChatMessage {
   conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@index([conversationId, createdAt])
+}
+
+/// The AI daily briefing, stored so it is generated once per organization per day
+/// (free models allow few requests a day). A row with no summary records a failed attempt.
+model DailyBriefing {
+  id             String   @id @default(cuid())
+  organizationId String
+  day            String /// YYYY-MM-DD (UTC)
+  summary        String?
+  model          String?
+  error          String?
+  generatedAt    DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, day])
 }
 
 // ───────────────────────── AI feedback & audit ─────────────────────────

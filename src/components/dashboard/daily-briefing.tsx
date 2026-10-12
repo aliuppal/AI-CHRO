@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 import { PriorityBadge } from "@/components/priority-badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getDailyBriefing } from "@/lib/briefing";
+import { failureMessage, getDailyBriefing } from "@/lib/briefing";
 import { getOpenAlerts } from "@/lib/data/alerts";
 import { db } from "@/lib/db";
 
@@ -32,8 +32,9 @@ export async function DailyBriefing({ organizationId, userId }: { organizationId
   const [alerts, briefing, feedback] = await Promise.all([
     getOpenAlerts(organizationId),
     getDailyBriefing(organizationId, day).catch((error: unknown) => {
-      console.error("Daily briefing generation failed", error);
-      return null;
+      // Database or unexpected errors: still show the alerts below.
+      console.error("Daily briefing failed", error);
+      return { status: "failed", reason: "unavailable" } as const;
     }),
     db.aiFeedback.findUnique({
       where: {
@@ -47,13 +48,10 @@ export async function DailyBriefing({ organizationId, userId }: { organizationId
     <section aria-labelledby="briefing-title" className="flex flex-col rounded-xl border bg-card">
       <div className="flex flex-col gap-4 p-6">
         <BriefingHeader dateLabel={dateLabelOf(now)} />
-        {briefing ? (
+        {briefing.status === "ready" ? (
           <p className="text-[17px] leading-relaxed text-pretty">{briefing.summary}</p>
         ) : (
-          <p className="text-muted-foreground">
-            The AI summary isn&apos;t available right now. The free model may be busy, so try Regenerate in a
-            minute. Your open alerts are below.
-          </p>
+          <p className="text-muted-foreground">{failureMessage(briefing.reason)} Your open alerts are below.</p>
         )}
       </div>
 
@@ -90,7 +88,7 @@ export async function DailyBriefing({ organizationId, userId }: { organizationId
 
       <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t px-6 py-3">
         <p className="text-xs text-muted-foreground">
-          Drafted by AI from your HR data{briefing ? " · " + briefing.model.replace(/:free$/, "") : ""}. Check before
+          Drafted by AI from your HR data{briefing.status === "ready" ? " · " + briefing.model.replace(/:free$/, "") : ""}. Check before
           acting.
         </p>
         <BriefingActions day={day} initialRating={feedback?.rating ?? null} />
