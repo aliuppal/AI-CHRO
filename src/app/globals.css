@@ -1,0 +1,148 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Tokens come from DESIGN.md (Supabaze-inspired). White canvas, near-black ink,
+   one emerald primary. Keep emerald to filled CTAs and the wordmark accent. */
+:root {
+  /* DESIGN.md palette */
+  --emerald: #3ecf8e;
+  --emerald-deep: #24b47e;
+  --ink: #171717;
+  --ink-mute: #707070;
+  --ink-mute-2: #9a9a9a;
+  --canvas: #ffffff;
+  --canvas-soft: #fafafa;
+  --canvas-night: #1c1c1c;
+  --hairline: #dfdfdf;
+  --hairline-strong: #c7c7c7;
+  --hairline-cool: #ededed;
+  --hairline-cool-2: #efefef;
+
+  /* Status — only for risk badges and charts, never as system colour */
+  --risk-high: #e2005a;
+  --risk-high-soft: #fde6ef;
+  --risk-medium: #ffdb13;
+  --risk-medium-soft: #fff8cc;
+
+  /* shadcn semantic mapping */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --card: var(--canvas);
+  --card-foreground: var(--ink);
+  --popover: var(--canvas);
+  --popover-foreground: var(--ink);
+  --primary: var(--emerald);
+  --primary-foreground: var(--ink); /* near-black on green, per DESIGN.md */
+  --secondary: var(--canvas-soft);
+  --secondary-foreground: var(--ink);
+  --muted: var(--canvas-soft);
+  --muted-foreground: var(--ink-mute);
+  --accent: var(--hairline-cool-2);
+  --accent-foreground: var(--ink);
+  --destructive: var(--risk-high);
+  --border: var(--hairline);
+  --input: var(--hairline-strong);
+  --ring: var(--ink); /* emerald on white is < 3:1, so focus rings use ink */
+
+  --chart-1: var(--emerald);
+  --chart-2: var(--ink);
+  --chart-3: #644fc1;
+  --chart-4: var(--ink-mute-2);
+  --chart-5: var(--risk-medium);
+
+  --sidebar: var(--canvas-soft);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: var(--canvas);
+  --sidebar-accent: var(--hairline-cool-2);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--hairline-cool);
+  --sidebar-ring: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-deep: var(--emerald-deep);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-night: var(--canvas-night);
+  --color-risk-high: var(--risk-high);
+  --color-risk-high-soft: var(--risk-high-soft);
+  --color-risk-medium: var(--risk-medium);
+  --color-risk-medium-soft: var(--risk-medium-soft);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-geist-sans);
+  --font-heading: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* DESIGN.md radius scale: 6px buttons, 12px cards, 16px dialogs */
+  --radius-xs: 4px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
+  --radius-4xl: 9999px;
+
+  /* DESIGN.md display tier — weight 500, negative tracking */
+  --text-display-xl: 48px;
+  --text-display-xl--line-height: 1.1;
+  --text-display-xl--letter-spacing: -1.44px;
+  --text-display-lg: 36px;
+  --text-display-lg--line-height: 1.15;
+  --text-display-lg--letter-spacing: -0.72px;
+  --text-display-md: 28px;
+  --text-display-md--line-height: 1.2;
+  --text-display-md--letter-spacing: -0.42px;
+  --text-heading-lg: 22px;
+  --text-heading-lg--line-height: 1.2;
+  --text-heading-md: 18px;
+  --text-heading-md--line-height: 1.4;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1, h2, h3 {
+    @apply font-medium;
+  }
+}
