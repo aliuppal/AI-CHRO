@@ -73,6 +73,8 @@ export async function getDailyBriefing(organizationId: string, day: string): Pro
       console.warn("Daily briefing: empty answer from " + id);
     } catch (error) {
       console.warn("Daily briefing: " + id + " failed", error);
+      // The free-model daily limit is per OpenRouter account, so other free models will fail too.
+      if (String(error).includes("free-models-per-day")) break;
     }
   }
   throw new Error("Every free model failed to write the briefing");
