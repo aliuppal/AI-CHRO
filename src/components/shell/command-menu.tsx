@@ -90,7 +90,7 @@ export function CommandMenu() {
 
           {question && (
             <CommandGroup heading="Ask CHRO" forceMount>
-              <CommandItem forceMount value={`ask:${question}`} onSelect={() => go(askChroHref(question))}>
+              <CommandItem forceMount value={`ask:${question}`} onSelect={() => go(askChroHref(question, { send: true }))}>
                 <Sparkles />
                 <span className="truncate">Ask &ldquo;{question}&rdquo;</span>
               </CommandItem>

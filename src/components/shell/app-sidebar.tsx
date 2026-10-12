@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -36,9 +37,31 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
   );
 }
 
-export function AppSidebar({ organizationName }: { organizationName: string }) {
-  const pathname = usePathname();
+function NavList({ items, pathname }: { items: NavItem[]; pathname: string }) {
+  return (
+    <SidebarMenu>
+      {items.map((item) => (
+        <NavLink key={item.href} item={item} pathname={pathname} />
+      ))}
+    </SidebarMenu>
+  );
+}
 
+/** Reads the URL, so it lives under <Suspense> (dynamic routes can't prerender it). */
+function ActiveNavList({ items }: { items: NavItem[] }) {
+  return <NavList items={items} pathname={usePathname()} />;
+}
+
+/** Nav with the current page highlighted; renders unhighlighted until the URL is known. */
+function Nav({ items }: { items: NavItem[] }) {
+  return (
+    <Suspense fallback={<NavList items={items} pathname="" />}>
+      <ActiveNavList items={items} />
+    </Suspense>
+  );
+}
+
+export function AppSidebar({ organizationName }: { organizationName: string }) {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -65,19 +88,13 @@ export function AppSidebar({ organizationName }: { organizationName: string }) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {mainNav.map((item) => (
-                <NavLink key={item.href} item={item} pathname={pathname} />
-              ))}
-            </SidebarMenu>
+            <Nav items={mainNav} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
-        <SidebarMenu>
-          <NavLink item={settingsNav} pathname={pathname} />
-        </SidebarMenu>
+        <Nav items={[settingsNav]} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

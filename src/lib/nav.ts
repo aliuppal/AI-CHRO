@@ -34,6 +34,6 @@ export const settingsNav: NavItem = {
 };
 
 /** Prefilled prompts — used by the ⌘K actions and the empty states. */
-export function askChroHref(prompt: string) {
-  return `/chat?q=${encodeURIComponent(prompt)}`;
+export function askChroHref(prompt: string, options: { send?: boolean } = {}) {
+  return "/chat?q=" + encodeURIComponent(prompt) + (options.send ? "&send=1" : "");
 }
