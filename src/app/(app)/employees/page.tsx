@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
 import { AddEmployee, DirectorySkeleton, EmployeeDirectory } from "@/components/people/employee-directory";
+import { ImportEmployeesDialog } from "@/components/people/import-employees-dialog";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/session";
 
@@ -22,6 +23,8 @@ export default function EmployeesPage({ searchParams }: PageProps<"/employees">)
         title="Employees"
         description="Your team, with early warnings on burnout and attrition."
         actions={
+          <>
+          <ImportEmployeesDialog />
           <Suspense
             fallback={
               <Button disabled>
@@ -32,6 +35,7 @@ export default function EmployeesPage({ searchParams }: PageProps<"/employees">)
           >
             <AddEmployee organizationId={organizationId} />
           </Suspense>
+          </>
         }
       />
       <Suspense fallback={<DirectorySkeleton />}>

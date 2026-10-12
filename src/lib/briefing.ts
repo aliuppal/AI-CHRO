@@ -2,7 +2,7 @@ import "server-only";
 import { generateText } from "ai";
 import { cacheLife, cacheTag } from "next/cache";
 
-import { chatModel } from "@/lib/ai";
+import { FREE_MODELS, freeModel } from "@/lib/ai";
 import { getOpenAlerts } from "@/lib/data/alerts";
 import { getDashboardMetrics } from "@/lib/data/dashboard";
 
@@ -55,15 +55,25 @@ export async function getDailyBriefing(organizationId: string, day: string): Pro
     ...alerts.map((a) => `- [${a.priority}] ${a.title}. ${a.reason}${a.nextAction ? ` Suggested: ${a.nextAction}.` : ""}`),
   ].filter(Boolean);
 
-  const { text, response } = await generateText({
-    model: chatModel,
-    system: SYSTEM,
-    prompt: `${facts.join("\n")}\n\nWrite today's briefing in exactly 2 sentences, at most 60 words in total.`,
-    maxOutputTokens: 1500,
-    maxRetries: 1,
-  });
+  const prompt = facts.join("\n") + "\n\nWrite today's briefing in exactly 2 sentences, at most 60 words in total.";
 
-  const summary = clean(text);
-  if (!summary) throw new Error("Model returned an empty briefing");
-  return { summary, model: response.modelId, generatedAt: new Date().toISOString() };
+  // Free models sometimes return nothing (rate limits, or reasoning that eats the budget).
+  // Try each free model in turn until one gives a usable answer.
+  for (const id of FREE_MODELS) {
+    try {
+      const { text, response } = await generateText({
+        model: freeModel(id),
+        system: SYSTEM,
+        prompt,
+        maxOutputTokens: 1500,
+        maxRetries: 0,
+      });
+      const summary = clean(text);
+      if (summary) return { summary, model: response.modelId, generatedAt: new Date().toISOString() };
+      console.warn("Daily briefing: empty answer from " + id);
+    } catch (error) {
+      console.warn("Daily briefing: " + id + " failed", error);
+    }
+  }
+  throw new Error("Every free model failed to write the briefing");
 }

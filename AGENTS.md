@@ -14,5 +14,7 @@ primary with near-black text on it, 6px button radius, 12px card radius, display
 Keep emerald scarce (one filled green CTA per viewport). Status colours belong in charts and badges only.
 
 ## AI models
-Use OpenRouter **free models only** (ids ending in `:free`). `src/lib/ai.ts` throws on any other id — never
-remove that guard or add a paid model. Import `chatModel` from `@/lib/ai` rather than creating new providers.
+Use OpenRouter **free models only** (ids ending in `:free`). They are listed in `OPENROUTER_MODELS` (comma separated,
+first = primary, rest = fallbacks; OpenRouter accepts at most 3 per request). `src/lib/ai.ts` throws on any other id —
+never remove that guard or add a paid model. Use `chatModel` (with fallbacks) or `freeModel(id)` from `@/lib/ai`.
+Free models are reasoning models: keep `reasoning: { effort: "low", exclude: true }` or they can return empty text.

@@ -1,0 +1,6 @@
+first_name,last_name,email,job_title,department,manager_email,employment_type,start_date,level,country,region,gender_identity
+Priya,Raman,priya.raman@example.com,Head of Design,Design,,Full-time,2024-02-05,Director,US,CA,Woman
+Tomas,Ibarra,tomas.ibarra@example.com,Product Designer,Design,priya.raman@example.com,Full-time,2025-06-16,IC3,US,NY,Man
+Sam,Okoro,sam.okoro@example.com,UX Researcher,Design,priya.raman@example.com,Part-time,2026-01-12,IC2,US,TX,Non-binary
+Ahmed,Siddiqui,ahmed.siddiqui@example.com,Design Intern,Design,priya.raman@example.com,Intern,2026-10-05,,US,CA,
+Lucy,Chen,lucy.chen@example.com,Backend Engineer,Engineering,,Full-time,2026-09-01,IC2,US,WA,

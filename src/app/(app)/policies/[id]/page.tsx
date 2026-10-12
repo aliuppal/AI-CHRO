@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { ArrowLeft, TriangleAlert } from "lucide-react";
 
 import { Markdown } from "@/components/chat/markdown";
@@ -17,6 +18,7 @@ type Finding = { severity?: string; clause?: string; issue?: string; suggestion?
 
 async function PolicyDetail({ params }: { params: PageProps<"/policies/[id]">["params"] }) {
   const { id } = await params;
+  await connection(); // database reads happen per request, never at build time
   const policy = await getPolicy(id, getCurrentUser().organizationId);
   if (!policy) notFound();
   const findings = Array.isArray(policy.complianceReport) ? (policy.complianceReport as Finding[]) : [];
