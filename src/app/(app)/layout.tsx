@@ -9,7 +9,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar organizationName={user.organizationName} />
-      <SidebarInset>
+      <SidebarInset className="min-w-0">
         <TopBar user={user} />
         <div id="content" tabIndex={-1} className="flex-1 px-4 py-8 outline-none md:px-8">
           <div className="mx-auto w-full max-w-7xl">{children}</div>

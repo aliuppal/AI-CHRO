@@ -1,25 +1,42 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Users } from "lucide-react";
+import { Plus } from "lucide-react";
 
-import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
-import { askChroHref } from "@/lib/nav";
+import { AddEmployee, DirectorySkeleton, EmployeeDirectory } from "@/components/people/employee-directory";
+import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Employees" };
 
-export default function EmployeesPage() {
+async function Directory({ organizationId, searchParams }: { organizationId: string; searchParams: PageProps<"/employees">["searchParams"] }) {
+  const { dept } = await searchParams;
+  return <EmployeeDirectory organizationId={organizationId} departmentId={typeof dept === "string" ? dept : undefined} />;
+}
+
+export default function EmployeesPage({ searchParams }: PageProps<"/employees">) {
+  const { organizationId } = getCurrentUser();
   return (
     <>
       <PageHeader
         title="Employees"
-        description="Your team, onboarding plans, pulse surveys and early warnings on burnout and attrition."
+        description="Your team, with early warnings on burnout and attrition."
+        actions={
+          <Suspense
+            fallback={
+              <Button disabled>
+                <Plus />
+                Add employee
+              </Button>
+            }
+          >
+            <AddEmployee organizationId={organizationId} />
+          </Suspense>
+        }
       />
-      <EmptyState
-        icon={Users}
-        title="No employees yet"
-        description="Once your team is here, pulse surveys and retention signals switch on automatically. Survey answers stay anonymous."
-        action={{ label: "Plan an onboarding", href: askChroHref("Create a 30-60-90 day onboarding plan for a new ") }}
-      />
+      <Suspense fallback={<DirectorySkeleton />}>
+        <Directory organizationId={organizationId} searchParams={searchParams} />
+      </Suspense>
     </>
   );
 }
