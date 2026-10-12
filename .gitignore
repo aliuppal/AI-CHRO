@@ -42,3 +42,9 @@ next-env.d.ts
 
 /src/generated/prisma
 !.env.example
+
+.vercel
+.env*
+
+# build output at any depth
+.next/

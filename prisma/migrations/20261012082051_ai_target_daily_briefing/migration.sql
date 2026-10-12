@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "AiTarget" ADD VALUE 'DAILY_BRIEFING';

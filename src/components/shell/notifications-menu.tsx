@@ -14,10 +14,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { sampleNotifications } from "@/lib/mock/notifications";
+import type { Priority } from "@/lib/priority";
 
-export function NotificationsMenu() {
-  const notifications = sampleNotifications;
+export type NotificationItem = {
+  id: string;
+  title: string;
+  detail: string;
+  priority: Priority;
+  href: string;
+  age: string;
+};
+
+export function NotificationsMenu({ notifications }: { notifications: NotificationItem[] }) {
   const urgent = notifications.filter((n) => n.priority === "high").length;
 
   return (
@@ -44,11 +52,14 @@ export function NotificationsMenu() {
         <DropdownMenuLabel className="flex items-center justify-between px-4 py-3">
           <span className="text-sm font-medium text-foreground">Notifications</span>
           <Badge variant="outline" className="font-normal text-muted-foreground">
-            Sample data
+            {notifications.length} open
           </Badge>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="m-0" />
         <div className="max-h-96 overflow-y-auto p-1">
+          {notifications.length === 0 && (
+            <p className="px-3 py-6 text-center text-sm text-muted-foreground">You&apos;re all caught up.</p>
+          )}
           {notifications.map((n) => (
             <DropdownMenuItem key={n.id} asChild className="items-start gap-3 px-3 py-2.5">
               <Link href={n.href}>

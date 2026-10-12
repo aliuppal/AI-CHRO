@@ -121,6 +121,7 @@ enum AiTarget {
   PULSE_SURVEY
   INTERVIEW_QUESTIONS
   RISK_ALERT
+  DAILY_BRIEFING
 }
 
 enum Rating {

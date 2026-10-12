@@ -1,9 +1,11 @@
+import { Suspense } from "react";
+
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { SessionUser } from "@/lib/session";
 
 import { CommandMenu } from "./command-menu";
-import { NotificationsMenu } from "./notifications-menu";
+import { Notifications, NotificationsFallback } from "./notifications";
 import { UserMenu } from "./user-menu";
 
 export function TopBar({ user }: { user: SessionUser }) {
@@ -13,7 +15,9 @@ export function TopBar({ user }: { user: SessionUser }) {
       <Separator orientation="vertical" className="mx-1 data-vertical:h-5 data-vertical:self-center" />
       <CommandMenu />
       <div className="ml-auto flex items-center gap-1">
-        <NotificationsMenu />
+        <Suspense fallback={<NotificationsFallback />}>
+          <Notifications organizationId={user.organizationId} />
+        </Suspense>
         <UserMenu user={user} />
       </div>
     </header>

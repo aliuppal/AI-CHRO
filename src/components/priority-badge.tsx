@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { Priority } from "@/lib/mock/notifications";
+import type { Priority } from "@/lib/priority";
 
 const styles: Record<Priority, { label: string; dot: string }> = {
   high: { label: "High", dot: "bg-risk-high" },
